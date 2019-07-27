@@ -1,5 +1,7 @@
 
 const User = require("./user.schema");
+const passport = require("passport");
+
 module.exports.register = (req, res, next) => {
 
     const data = {
@@ -13,4 +15,20 @@ module.exports.register = (req, res, next) => {
             return res.status(200).json(result);
         })
         .catch(error => res.status(500).json(error));
+}
+
+
+module.exports.login = (req, res, next) => {
+    passport.authenticate('local', function(err, user, info) {
+        if (err) {
+            res.status(500).json(err);
+        }
+        if (user){
+            let data = {
+                accessToken: user.generateJwt()
+            }
+            return res.status(200).json(data);
+        }
+        
+    })(req, res);
 }
