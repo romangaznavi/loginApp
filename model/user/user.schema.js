@@ -25,6 +25,7 @@ const userSchema = new mongoose.Schema({
   saltSecrete: String
 });
 
+// hashing password
 userSchema.pre("save", function(next) {
   let user = this;
   if (user.password) {
@@ -37,6 +38,7 @@ userSchema.pre("save", function(next) {
 userSchema.methods.validatePassword = function(password) {
   let cryptoHash = crypto.pbkdf2Sync(password,"salt",32,10,"sha512");
   if (this.password) {
+    // Below == is used to compare and return true if matched and false otherwise
     return this.password == cryptoHash.toString("hex");
   }
   return false;

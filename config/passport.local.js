@@ -7,12 +7,11 @@ passport.use(new LocalStrategy(
       },
     function(email, password, done) {
       User.findOne({ email: email }, function(err, user) {
-          console.log("Inside findOne")
         if (err) { return done(err); }
         if (!user) {
           return done(null, false, { message: 'Incorrect email.' });
         }
-        console.log(user,'User found');
+        
         if (!user.validatePassword(password)) {
           return done(null, false, { message: 'Incorrect password.' });
         }
